@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, Shield, FileDown, FileSpreadsheet } from "lucide-react";
+import { Search, Filter, Shield, FileDown, FileSpreadsheet, ChevronLeft, ChevronRight } from "lucide-react";
 import { faultEntries, type FaultEntry, type Severity } from "@/data/protectionMatrix";
 import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
@@ -7,17 +7,20 @@ import { Button } from "@/components/ui/button";
 import { exportToPDF, exportToExcel } from "@/lib/exportProtectionMatrix";
 
 const severityOptions: Severity[] = ["critical", "high", "medium", "low"];
-const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))];
+const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))].sort();
+const PAGE_SIZE = 50;
 
 export default function ProtectionMatrix() {
   const [search, setSearch] = useState("");
   const [severityFilter, setSeverityFilter] = useState<Severity | "all">("all");
   const [subsystemFilter, setSubsystemFilter] = useState("all");
   const [selectedFault, setSelectedFault] = useState<FaultEntry | null>(null);
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
+    setPage(1);
     return faultEntries.filter(f => {
-      const matchSearch = search === "" || [f.faultCode, f.faultDescription, f.component, f.subsystem]
+      const matchSearch = search === "" || [f.faultCode, f.faultDescription, f.faultDescriptionEn, f.component, f.subsystem]
         .some(s => s.toLowerCase().includes(search.toLowerCase()));
       const matchSeverity = severityFilter === "all" || f.severity === severityFilter;
       const matchSubsystem = subsystemFilter === "all" || f.subsystem === subsystemFilter;
@@ -25,11 +28,14 @@ export default function ProtectionMatrix() {
     });
   }, [search, severityFilter, subsystemFilter]);
 
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-bold">Matriz de Proteção</h2>
-        <p className="text-sm text-muted-foreground">Catálogo completo de falhas, impactos e ações corretivas do WTG GWH171 6.0MW</p>
+        <p className="text-sm text-muted-foreground">Catálogo completo de falhas, impactos e ações corretivas do WTG GWH171 6.0MW — {faultEntries.length} registros totais</p>
       </div>
 
       {/* Filters */}
@@ -61,7 +67,7 @@ export default function ProtectionMatrix() {
             onChange={e => setSubsystemFilter(e.target.value)}
             className="text-sm rounded-lg border border-input bg-card px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="all">Todos Subsistemas</option>
+            <option value="all">Todos Subsistemas ({subsystemOptions.length})</option>
             {subsystemOptions.map(s => (
               <option key={s} value={s}>{s}</option>
             ))}
@@ -86,15 +92,15 @@ export default function ProtectionMatrix() {
               <tr className="table-header">
                 <th className="text-left px-4 py-3 w-28">Código</th>
                 <th className="text-left px-4 py-3">Subsistema</th>
-                <th className="text-left px-4 py-3">Componente</th>
-                <th className="text-left px-4 py-3">Descrição da Falha</th>
+                <th className="text-left px-4 py-3">Descrição (PT)</th>
+                <th className="text-left px-4 py-3">Description (EN)</th>
                 <th className="text-left px-4 py-3 w-24">Severidade</th>
                 <th className="text-left px-4 py-3">Nível de Parada</th>
                 <th className="text-left px-4 py-3 w-16">SC</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map(fault => (
+              {paged.map(fault => (
                 <tr
                   key={fault.id}
                   className="border-b border-border/40 hover:bg-muted/30 cursor-pointer transition-colors"
@@ -107,8 +113,8 @@ export default function ProtectionMatrix() {
                       <span className="text-xs">{fault.subsystem}</span>
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs">{fault.component}</td>
-                  <td className="px-4 py-3 text-xs max-w-sm">{fault.faultDescription}</td>
+                  <td className="px-4 py-3 text-xs max-w-[200px] truncate">{fault.faultDescription}</td>
+                  <td className="px-4 py-3 text-xs max-w-[200px] truncate text-muted-foreground">{fault.faultDescriptionEn}</td>
                   <td className="px-4 py-3"><SeverityBadge severity={fault.severity} /></td>
                   <td className="px-4 py-3 text-xs text-muted-foreground">{fault.stopLevel}</td>
                   <td className="px-4 py-3">
@@ -119,6 +125,23 @@ export default function ProtectionMatrix() {
             </tbody>
           </table>
         </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border/40">
+            <span className="text-xs text-muted-foreground">
+              Mostrando {(page - 1) * PAGE_SIZE + 1}-{Math.min(page * PAGE_SIZE, filtered.length)} de {filtered.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium">{page} / {totalPages}</span>
+              <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <FaultDetailDialog fault={selectedFault} open={!!selectedFault} onOpenChange={o => !o && setSelectedFault(null)} />
