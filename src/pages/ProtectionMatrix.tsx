@@ -68,6 +68,14 @@ export default function ProtectionMatrix() {
           </select>
         </div>
         <span className="text-xs text-muted-foreground">{filtered.length} registro(s)</span>
+        <div className="flex gap-2 ml-auto">
+          <Button variant="outline" size="sm" onClick={() => exportToPDF(filtered)}>
+            <FileDown className="h-4 w-4 mr-1" /> PDF
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => exportToExcel(filtered)}>
+            <FileSpreadsheet className="h-4 w-4 mr-1" /> Excel
+          </Button>
+        </div>
       </div>
 
       {/* Table */}
