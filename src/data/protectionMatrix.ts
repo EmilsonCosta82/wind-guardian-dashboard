@@ -55692,3 +55692,32 @@ export const faultsBySubsystem: Record<string, number> = {
   "Cooling System": 1,
 };
 export const faultsBySeverity = {"critical": 55, "high": 510, "medium": 106, "low": 2806};
+export type SystemStatus = "operational" | "warning" | "fault" | "offline";
+
+export interface SubsystemInfo {
+  name: string;
+  icon: string;
+  status: SystemStatus;
+  totalFaults: number;
+  criticalFaults: number;
+  components: string[];
+}
+
+export function getStats() {
+  const critical = faultEntries.filter(f => f.severity === "critical").length;
+  const high = faultEntries.filter(f => f.severity === "high").length;
+  const medium = faultEntries.filter(f => f.severity === "medium").length;
+  const low = faultEntries.filter(f => f.severity === "low").length;
+  const safetyChain = faultEntries.filter(f => f.safetyChainTriggered).length;
+  const subsystemSet = new Set(faultEntries.map(f => f.subsystem));
+  return { total: faultEntries.length, critical, high, medium, low, safetyChain, subsystemCount: subsystemSet.size };
+}
+
+export const subsystems: SubsystemInfo[] = Object.entries(faultsBySubsystem).map(([name, total]) => {
+  const entries = faultEntries.filter(f => f.subsystem === name);
+  const icon = entries[0]?.subsystemIcon || "🔧";
+  const criticalFaults = entries.filter(f => f.severity === "critical").length;
+  const components = [...new Set(entries.map(f => f.component).filter(c => c.length < 50))].slice(0, 6);
+  const status: SystemStatus = criticalFaults > 0 ? "fault" : entries.some(f => f.severity === "high") ? "warning" : "operational";
+  return { name, icon, status, totalFaults: total, criticalFaults, components };
+});
