@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, Shield } from "lucide-react";
+import { Search, Filter, Shield, FileDown, FileSpreadsheet } from "lucide-react";
 import { faultEntries, type FaultEntry, type Severity } from "@/data/protectionMatrix";
 import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
+import { Button } from "@/components/ui/button";
+import { exportToPDF, exportToExcel } from "@/lib/exportProtectionMatrix";
 
 const severityOptions: Severity[] = ["critical", "high", "medium", "low"];
 const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))];
