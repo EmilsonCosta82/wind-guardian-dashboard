@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, Shield } from "lucide-react";
+import { Search, Filter, Shield, FileDown, FileSpreadsheet } from "lucide-react";
 import { faultEntries, type FaultEntry, type Severity } from "@/data/protectionMatrix";
 import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
+import { Button } from "@/components/ui/button";
+import { exportToPDF, exportToExcel } from "@/lib/exportProtectionMatrix";
 
 const severityOptions: Severity[] = ["critical", "high", "medium", "low"];
 const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))];
@@ -66,6 +68,14 @@ export default function ProtectionMatrix() {
           </select>
         </div>
         <span className="text-xs text-muted-foreground">{filtered.length} registro(s)</span>
+        <div className="flex gap-2 ml-auto">
+          <Button variant="outline" size="sm" onClick={() => exportToPDF(filtered)}>
+            <FileDown className="h-4 w-4 mr-1" /> PDF
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => exportToExcel(filtered)}>
+            <FileSpreadsheet className="h-4 w-4 mr-1" /> Excel
+          </Button>
+        </div>
       </div>
 
       {/* Table */}
