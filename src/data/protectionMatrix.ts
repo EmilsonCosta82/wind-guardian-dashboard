@@ -74790,3 +74790,33 @@ export const faultEntries: FaultEntry[] = [
     ],
   },
 ];
+// Computed stats for Dashboard
+export function getStats() {
+  const total = faultEntries.length;
+  const critical = faultEntries.filter(f => f.severity === "critical").length;
+  const high = faultEntries.filter(f => f.severity === "high").length;
+  const medium = faultEntries.filter(f => f.severity === "medium").length;
+  const low = faultEntries.filter(f => f.severity === "low").length;
+  const safetyChain = faultEntries.filter(f => f.safetyChainTriggered).length;
+  const subsystemSet = new Set(faultEntries.map(f => f.subsystem));
+  return { total, critical, high, medium, low, safetyChain, subsystemCount: subsystemSet.size };
+}
+
+export const subsystems = (() => {
+  const map = new Map<string, { name: string; icon: string; totalFaults: number; criticalFaults: number }>();
+  for (const f of faultEntries) {
+    const existing = map.get(f.subsystem);
+    if (existing) {
+      existing.totalFaults++;
+      if (f.severity === "critical") existing.criticalFaults++;
+    } else {
+      map.set(f.subsystem, {
+        name: f.subsystem,
+        icon: f.subsystemIcon,
+        totalFaults: 1,
+        criticalFaults: f.severity === "critical" ? 1 : 0,
+      });
+    }
+  }
+  return Array.from(map.values());
+})();
