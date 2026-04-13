@@ -1,12 +1,5 @@
-import { subsystems, type SystemStatus } from "@/data/protectionMatrix";
-import { CheckCircle2, AlertTriangle, XCircle, MinusCircle } from "lucide-react";
-
-const statusConfig: Record<SystemStatus, { label: string; icon: typeof CheckCircle2; classes: string }> = {
-  operational: { label: "Operacional", icon: CheckCircle2, classes: "text-success" },
-  warning: { label: "Alerta", icon: AlertTriangle, classes: "text-warning" },
-  fault: { label: "Falha", icon: XCircle, classes: "text-destructive" },
-  offline: { label: "Offline", icon: MinusCircle, classes: "text-muted-foreground" },
-};
+import { subsystems } from "@/data/protectionMatrix";
+import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 
 export default function Subsystems() {
   return (
@@ -18,7 +11,7 @@ export default function Subsystems() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {subsystems.map(sub => {
-          const { label, icon: StatusIcon, classes } = statusConfig[sub.status];
+          const hasCritical = sub.criticalFaults > 0;
           return (
             <div key={sub.name} className="kpi-card">
               <div className="flex items-start justify-between mb-3">
@@ -26,9 +19,9 @@ export default function Subsystems() {
                   <span className="text-2xl">{sub.icon}</span>
                   <div>
                     <h3 className="text-sm font-semibold">{sub.name}</h3>
-                    <div className={`flex items-center gap-1 text-xs ${classes}`}>
-                      <StatusIcon className="h-3 w-3" />
-                      {label}
+                    <div className={`flex items-center gap-1 text-xs ${hasCritical ? 'text-destructive' : 'text-success'}`}>
+                      {hasCritical ? <AlertTriangle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
+                      {hasCritical ? 'Alerta' : 'Operacional'}
                     </div>
                   </div>
                 </div>
@@ -38,15 +31,10 @@ export default function Subsystems() {
                 </div>
               </div>
               {sub.criticalFaults > 0 && (
-                <div className="text-xs text-destructive font-medium mb-2">
+                <div className="text-xs text-destructive font-medium">
                   ⚠ {sub.criticalFaults} falha(s) crítica(s)
                 </div>
               )}
-              <div className="flex flex-wrap gap-1.5">
-                {sub.components.map(c => (
-                  <span key={c} className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">{c}</span>
-                ))}
-              </div>
             </div>
           );
         })}
