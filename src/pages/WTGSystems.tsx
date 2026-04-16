@@ -412,6 +412,43 @@ export default function WTGSystems() {
                     </div>
                   </TabsContent>
                 )}
+
+                <TabsContent value="matrix" className="mt-4">
+                  {relatedFaults.length > 0 ? (
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Falhas da Matriz de Proteção relacionadas a este subsistema (máx. 20).{" "}
+                        <button className="text-primary hover:underline inline-flex items-center gap-1" onClick={() => navigate("/matriz")}>
+                          Ver matriz completa <ExternalLink className="h-3 w-3" />
+                        </button>
+                      </p>
+                      <div className="overflow-x-auto rounded-lg border border-border/60">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="bg-muted/50">
+                              <th className="text-left px-3 py-2">Código</th>
+                              <th className="text-left px-3 py-2">Descrição</th>
+                              <th className="text-left px-3 py-2">Severidade</th>
+                              <th className="text-left px-3 py-2">Parada</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {relatedFaults.map(f => (
+                              <tr key={f.id} className="border-t border-border/30 hover:bg-muted/30 cursor-pointer" onClick={() => navigate("/matriz")}>
+                                <td className="px-3 py-2 font-mono font-semibold text-primary">{f.faultCode}</td>
+                                <td className="px-3 py-2 max-w-[250px] truncate">{f.faultDescription}</td>
+                                <td className="px-3 py-2"><SeverityBadge severity={f.severity} /></td>
+                                <td className="px-3 py-2 text-muted-foreground">{f.stopLevel}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Nenhuma falha mapeada para este subsistema.</p>
+                  )}
+                </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
