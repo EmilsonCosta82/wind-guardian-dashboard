@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { Zap, Wind, Compass, Droplets, Cog, Cpu, Building2, ChevronDown, ChevronRight, Info, Wrench, AlertTriangle, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Zap, Wind, Compass, Droplets, Cog, Cpu, Building2, ChevronDown, ChevronRight, Info, Wrench, AlertTriangle, Settings, Shield, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { faultEntries } from "@/data/protectionMatrix";
+import { getSubsystemsForSystemId } from "@/lib/subsystemMapping";
+import SeverityBadge from "@/components/SeverityBadge";
 
 interface SystemSection {
   id: string;
@@ -274,7 +278,18 @@ const systems: SystemSection[] = [
 ];
 
 export default function WTGSystems() {
-  const [expandedSystem, setExpandedSystem] = useState<string | null>("converter");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const systemParam = searchParams.get("system");
+  const [expandedSystem, setExpandedSystem] = useState<string | null>(systemParam || "converter");
+
+  useEffect(() => {
+    if (systemParam) setExpandedSystem(systemParam);
+  }, [systemParam]);
+
+  const relatedFaults = expandedSystem
+    ? faultEntries.filter(f => getSubsystemsForSystemId(expandedSystem).includes(f.subsystem)).slice(0, 20)
+    : [];
 
   return (
     <div className="space-y-6">
@@ -329,11 +344,12 @@ export default function WTGSystems() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="specs" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+               <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="specs" className="text-xs"><Settings className="h-3.5 w-3.5 mr-1" />Especificações</TabsTrigger>
                   <TabsTrigger value="components" className="text-xs"><Info className="h-3.5 w-3.5 mr-1" />Componentes</TabsTrigger>
                   <TabsTrigger value="maintenance" className="text-xs"><Wrench className="h-3.5 w-3.5 mr-1" />Manutenção</TabsTrigger>
                   {sys.faults && <TabsTrigger value="faults" className="text-xs"><AlertTriangle className="h-3.5 w-3.5 mr-1" />Falhas</TabsTrigger>}
+                  <TabsTrigger value="matrix" className="text-xs"><Shield className="h-3.5 w-3.5 mr-1" />Matriz ({relatedFaults.length})</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="specs" className="mt-4">
@@ -396,6 +412,43 @@ export default function WTGSystems() {
                     </div>
                   </TabsContent>
                 )}
+
+                <TabsContent value="matrix" className="mt-4">
+                  {relatedFaults.length > 0 ? (
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Falhas da Matriz de Proteção relacionadas a este subsistema (máx. 20).{" "}
+                        <button className="text-primary hover:underline inline-flex items-center gap-1" onClick={() => navigate("/matriz")}>
+                          Ver matriz completa <ExternalLink className="h-3 w-3" />
+                        </button>
+                      </p>
+                      <div className="overflow-x-auto rounded-lg border border-border/60">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="bg-muted/50">
+                              <th className="text-left px-3 py-2">Código</th>
+                              <th className="text-left px-3 py-2">Descrição</th>
+                              <th className="text-left px-3 py-2">Severidade</th>
+                              <th className="text-left px-3 py-2">Parada</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {relatedFaults.map(f => (
+                              <tr key={f.id} className="border-t border-border/30 hover:bg-muted/30 cursor-pointer" onClick={() => navigate("/matriz")}>
+                                <td className="px-3 py-2 font-mono font-semibold text-primary">{f.faultCode}</td>
+                                <td className="px-3 py-2 max-w-[250px] truncate">{f.faultDescription}</td>
+                                <td className="px-3 py-2"><SeverityBadge severity={f.severity} /></td>
+                                <td className="px-3 py-2 text-muted-foreground">{f.stopLevel}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Nenhuma falha mapeada para este subsistema.</p>
+                  )}
+                </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
