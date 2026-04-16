@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, Shield, FileDown, FileSpreadsheet, ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Search, Filter, Shield, FileDown, FileSpreadsheet, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { faultEntries, type FaultEntry, type Severity } from "@/data/protectionMatrix";
 import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
@@ -16,6 +17,7 @@ export default function ProtectionMatrix() {
   const [subsystemFilter, setSubsystemFilter] = useState("all");
   const [selectedFault, setSelectedFault] = useState<FaultEntry | null>(null);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   const filtered = useMemo(() => {
     setPage(1);
@@ -108,10 +110,25 @@ export default function ProtectionMatrix() {
                 >
                   <td className="px-4 py-3 font-mono text-xs font-semibold text-primary">{fault.faultCode}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <span className="flex items-center gap-2">
-                      <span>{fault.subsystemIcon}</span>
-                      <span className="text-xs">{fault.subsystem}</span>
-                    </span>
+                    {(() => {
+                      const systemId = getSystemIdForSubsystem(fault.subsystem);
+                      return systemId ? (
+                        <button
+                          className="flex items-center gap-2 group hover:text-primary transition-colors"
+                          onClick={(e) => { e.stopPropagation(); navigate(`/sistemas?system=${systemId}`); }}
+                          title={`Ver referência técnica: ${fault.subsystem}`}
+                        >
+                          <span>{fault.subsystemIcon}</span>
+                          <span className="text-xs group-hover:underline">{fault.subsystem}</span>
+                          <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <span>{fault.subsystemIcon}</span>
+                          <span className="text-xs">{fault.subsystem}</span>
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="px-4 py-3 text-xs max-w-[200px] truncate">{fault.faultDescription}</td>
                   <td className="px-4 py-3 text-xs max-w-[200px] truncate text-muted-foreground">{fault.faultDescriptionEn}</td>
