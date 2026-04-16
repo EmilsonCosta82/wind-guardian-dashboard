@@ -344,11 +344,12 @@ export default function WTGSystems() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="specs" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+               <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="specs" className="text-xs"><Settings className="h-3.5 w-3.5 mr-1" />Especificações</TabsTrigger>
                   <TabsTrigger value="components" className="text-xs"><Info className="h-3.5 w-3.5 mr-1" />Componentes</TabsTrigger>
                   <TabsTrigger value="maintenance" className="text-xs"><Wrench className="h-3.5 w-3.5 mr-1" />Manutenção</TabsTrigger>
                   {sys.faults && <TabsTrigger value="faults" className="text-xs"><AlertTriangle className="h-3.5 w-3.5 mr-1" />Falhas</TabsTrigger>}
+                  <TabsTrigger value="matrix" className="text-xs"><Shield className="h-3.5 w-3.5 mr-1" />Matriz ({relatedFaults.length})</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="specs" className="mt-4">
