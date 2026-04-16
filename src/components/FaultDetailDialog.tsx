@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { FaultEntry } from "@/data/protectionMatrix";
 import SeverityBadge from "./SeverityBadge";
-import { AlertTriangle, ArrowRight, CheckCircle2, LinkIcon, Shield, Globe } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, LinkIcon, Shield } from "lucide-react";
 
 interface Props {
   fault: FaultEntry | null;
@@ -20,12 +20,7 @@ export default function FaultDetailDialog({ fault, open, onOpenChange }: Props) 
             <span className="text-2xl">{fault.subsystemIcon}</span>
             <div>
               <DialogTitle className="text-lg">{fault.faultDescription}</DialogTitle>
-              <p className="text-sm text-muted-foreground mt-0.5">{fault.faultCode} · {fault.subsystem}</p>
-              {fault.faultDescriptionEn && (
-                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                  <Globe className="h-3 w-3" /> {fault.faultDescriptionEn}
-                </p>
-              )}
+              <p className="text-sm text-muted-foreground mt-0.5">{fault.faultCode} · {fault.component}</p>
             </div>
           </div>
         </DialogHeader>

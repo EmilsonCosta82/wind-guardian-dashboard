@@ -13,7 +13,6 @@ const severityData = [
   { name: "Crítico", value: stats.critical, color: "hsl(0, 72%, 51%)" },
   { name: "Alto", value: stats.high, color: "hsl(38, 92%, 50%)" },
   { name: "Médio", value: stats.medium, color: "hsl(199, 89%, 48%)" },
-  { name: "Baixo", value: stats.low, color: "hsl(142, 71%, 45%)" },
 ];
 
 const subsystemChartData = subsystems
