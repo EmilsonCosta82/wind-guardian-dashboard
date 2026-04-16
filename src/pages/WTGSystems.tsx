@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { Zap, Wind, Compass, Droplets, Cog, Cpu, Building2, ChevronDown, ChevronRight, Info, Wrench, AlertTriangle, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Zap, Wind, Compass, Droplets, Cog, Cpu, Building2, ChevronDown, ChevronRight, Info, Wrench, AlertTriangle, Settings, Shield, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { faultEntries } from "@/data/protectionMatrix";
+import { getSubsystemsForSystemId } from "@/lib/subsystemMapping";
+import SeverityBadge from "@/components/SeverityBadge";
 
 interface SystemSection {
   id: string;
@@ -274,7 +278,18 @@ const systems: SystemSection[] = [
 ];
 
 export default function WTGSystems() {
-  const [expandedSystem, setExpandedSystem] = useState<string | null>("converter");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const systemParam = searchParams.get("system");
+  const [expandedSystem, setExpandedSystem] = useState<string | null>(systemParam || "converter");
+
+  useEffect(() => {
+    if (systemParam) setExpandedSystem(systemParam);
+  }, [systemParam]);
+
+  const relatedFaults = expandedSystem
+    ? faultEntries.filter(f => getSubsystemsForSystemId(expandedSystem).includes(f.subsystem)).slice(0, 20)
+    : [];
 
   return (
     <div className="space-y-6">
