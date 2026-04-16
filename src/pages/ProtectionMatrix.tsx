@@ -6,6 +6,7 @@ import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
 import { Button } from "@/components/ui/button";
 import { exportToPDF, exportToExcel } from "@/lib/exportProtectionMatrix";
+import { getSystemIdForSubsystem } from "@/lib/subsystemMapping";
 
 const severityOptions: Severity[] = ["critical", "high", "medium", "low"];
 const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))].sort();
