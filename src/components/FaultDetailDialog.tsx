@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { FaultEntry } from "@/data/protectionMatrix";
 import SeverityBadge from "./SeverityBadge";
-import { AlertTriangle, ArrowRight, CheckCircle2, LinkIcon, Shield, Globe } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardCheck, LinkIcon, Shield, Globe } from "lucide-react";
 
 interface Props {
   fault: FaultEntry | null;
