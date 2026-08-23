@@ -190018,25 +190018,27 @@ const rawFaultEntries: FaultEntry[] = [
 ];
 
 // Computed stats for Dashboard
-// Merge field-proven treatments (Daily Log Report) into step 1 of each fault
+// Merge field-proven treatments (Daily Log Report) into steps 1..3 of each fault
 export const faultEntries: FaultEntry[] = rawFaultEntries.map((f) => {
-  const ft = fieldTreatments[f.faultCode];
-  if (!ft) return f;
+  const treatments = fieldTreatments[f.faultCode];
+  if (!treatments?.length) return f;
   return {
     ...f,
-    correctiveActions: [
-      {
-        step: 1,
-        action: `Field-proven action (Daily Log Report): ${ft.action}`,
+    correctiveActions: f.correctiveActions.map((a, i) => {
+      const t = treatments[i];
+      if (!t) return { ...a, step: i + 1 };
+      return {
+        step: i + 1,
+        action: t.action,
         responsible: "O&M Technician L2",
-        timeEstimate: "30 min",
+        timeEstimate: a.timeEstimate,
         fieldProven: true,
-        occurrences: ft.occurrences,
-      },
-      ...f.correctiveActions.slice(1).map((a, i) => ({ ...a, step: i + 2 })),
-    ],
+        occurrences: t.occurrences,
+      };
+    }),
   };
 });
+
 
 export function getStats() {
   const total = faultEntries.length;
