@@ -5,7 +5,9 @@ import SeverityBadge from "@/components/SeverityBadge";
 import { faultEntries, getStats, subsystems } from "@/data/protectionMatrix";
 import { useState } from "react";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
+import { useFaultOverrides } from "@/hooks/useFaultOverrides";
 import type { FaultEntry } from "@/data/protectionMatrix";
+
 
 const stats = getStats();
 
@@ -27,6 +29,8 @@ const subsystemChartData = subsystems
 
 export default function Dashboard() {
   const [selectedFault, setSelectedFault] = useState<FaultEntry | null>(null);
+  const { overrides, saveFault, resetFault } = useFaultOverrides();
+
   const recentCritical = faultEntries.filter(f => f.severity === "critical").slice(0, 5);
 
   return (
@@ -137,7 +141,15 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <FaultDetailDialog fault={selectedFault} open={!!selectedFault} onOpenChange={o => !o && setSelectedFault(null)} />
+      <FaultDetailDialog
+        fault={selectedFault}
+        open={!!selectedFault}
+        onOpenChange={o => !o && setSelectedFault(null)}
+        onSave={saveFault}
+        onReset={resetFault}
+        isEdited={!!selectedFault && !!overrides[String(selectedFault.id)]}
+      />
+
     </div>
   );
 }

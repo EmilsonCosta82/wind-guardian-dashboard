@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
+import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/matriz", label: "Matriz de Proteção", icon: Shield },
 ];
+
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -27,7 +29,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           )}
         </div>
 
+        {!collapsed && (
+          <div className="px-3 pt-3">
+            <div className="relative overflow-hidden rounded-lg border border-sidebar-border">
+              <img
+                src={wtgImage.url}
+                alt="Parque eólico Serra da Palmeira ao pôr do sol"
+                loading="lazy"
+                className="h-32 w-full object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-sidebar/95 to-transparent px-2 py-1.5">
+                <p className="text-[10px] font-medium text-sidebar-primary-foreground">Complexo Serra da Palmeira</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <nav className="flex-1 py-4 space-y-1 px-2">
+
           {navItems.map(({ path, label, icon: Icon }) => {
             const active = location.pathname === path;
             return (
