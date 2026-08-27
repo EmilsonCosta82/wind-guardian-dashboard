@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { Search, Filter, Shield, FileDown, FileSpreadsheet, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Filter, Shield, FileDown, FileSpreadsheet, ChevronLeft, ChevronRight, Pencil, RotateCcw } from "lucide-react";
 import { faultEntries, type FaultEntry, type Severity } from "@/data/protectionMatrix";
 import SeverityBadge from "@/components/SeverityBadge";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
 import { Button } from "@/components/ui/button";
 import { exportToPDF, exportToExcel } from "@/lib/exportProtectionMatrix";
+import { useFaultOverrides, getMergedEntries } from "@/hooks/useFaultOverrides";
 
 const severityOptions: Severity[] = ["critical", "high", "medium", "low"];
 const subsystemOptions = [...new Set(faultEntries.map(f => f.subsystem))].sort();
@@ -14,22 +15,31 @@ export default function ProtectionMatrix() {
   const [search, setSearch] = useState("");
   const [severityFilter, setSeverityFilter] = useState<Severity | "all">("all");
   const [subsystemFilter, setSubsystemFilter] = useState("all");
-  const [selectedFault, setSelectedFault] = useState<FaultEntry | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
+  const { overrides, editedCount, saveFault, resetFault, resetAll } = useFaultOverrides();
+
+  const entries = useMemo(() => getMergedEntries(overrides), [overrides]);
 
   const filtered = useMemo(() => {
     setPage(1);
-    return faultEntries.filter(f => {
+    return entries.filter(f => {
       const matchSearch = search === "" || [f.faultCode, f.faultDescription, f.faultDescriptionEn, f.component, f.subsystem]
         .some(s => s.toLowerCase().includes(search.toLowerCase()));
       const matchSeverity = severityFilter === "all" || f.severity === severityFilter;
       const matchSubsystem = subsystemFilter === "all" || f.subsystem === subsystemFilter;
       return matchSearch && matchSeverity && matchSubsystem;
     });
-  }, [search, severityFilter, subsystemFilter]);
+  }, [entries, search, severityFilter, subsystemFilter]);
+
+  const selectedFault: FaultEntry | null = useMemo(
+    () => (selectedId === null ? null : entries.find(f => f.id === selectedId) ?? null),
+    [entries, selectedId],
+  );
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
 
   return (
     <div className="space-y-5">
