@@ -137,7 +137,15 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <FaultDetailDialog fault={selectedFault} open={!!selectedFault} onOpenChange={o => !o && setSelectedFault(null)} />
+      <FaultDetailDialog
+        fault={selectedFault}
+        open={!!selectedFault}
+        onOpenChange={o => !o && setSelectedFault(null)}
+        onSave={saveFault}
+        onReset={resetFault}
+        isEdited={!!selectedFault && !!overrides[String(selectedFault.id)]}
+      />
+
     </div>
   );
 }
