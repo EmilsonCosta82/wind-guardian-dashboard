@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
+import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/matriz", label: "Matriz de Proteção", icon: Shield },
 ];
+
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
