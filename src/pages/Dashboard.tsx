@@ -29,6 +29,8 @@ const subsystemChartData = subsystems
 
 export default function Dashboard() {
   const [selectedFault, setSelectedFault] = useState<FaultEntry | null>(null);
+  const { overrides, saveFault, resetFault } = useFaultOverrides();
+
   const recentCritical = faultEntries.filter(f => f.severity === "critical").slice(0, 5);
 
   return (
