@@ -6,9 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import AppLayout from "@/components/AppLayout";
 import Dashboard from "@/pages/Dashboard";
 import ProtectionMatrix from "@/pages/ProtectionMatrix";
-import WTGSystems from "@/pages/WTGSystems";
-import ElectricalComponents from "@/pages/ElectricalComponents";
-import Commissioning from "@/pages/Commissioning";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,9 +20,6 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/matriz" element={<ProtectionMatrix />} />
-            <Route path="/sistemas" element={<WTGSystems />} />
-            <Route path="/componentes" element={<ElectricalComponents />} />
-            <Route path="/comissionamento" element={<Commissioning />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>

@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Shield, Wind, Cpu, Zap, ClipboardCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/matriz", label: "Matriz de Proteção", icon: Shield },
-  { path: "/sistemas", label: "Sistemas WTG", icon: Cpu },
-  { path: "/componentes", label: "Componentes Elétricos", icon: Zap },
-  { path: "/comissionamento", label: "Comissionamento", icon: ClipboardCheck },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
