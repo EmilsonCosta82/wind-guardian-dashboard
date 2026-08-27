@@ -84,7 +84,17 @@ export default function ProtectionMatrix() {
           </select>
         </div>
         <span className="text-xs text-muted-foreground">{filtered.length} registro(s)</span>
+        {editedCount > 0 && (
+          <span className="status-badge bg-warning/15 text-warning">
+            <Pencil className="h-3 w-3" /> {editedCount} editado(s)
+          </span>
+        )}
         <div className="flex gap-2 ml-auto">
+          {editedCount > 0 && (
+            <Button variant="ghost" size="sm" onClick={resetAll}>
+              <RotateCcw className="h-4 w-4 mr-1" /> Restaurar tudo
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={() => exportToPDF(filtered)}>
             <FileDown className="h-4 w-4 mr-1" /> PDF
           </Button>
@@ -93,6 +103,7 @@ export default function ProtectionMatrix() {
           </Button>
         </div>
       </div>
+
 
       {/* Table */}
       <div className="bg-card rounded-xl border border-border/60 shadow-sm overflow-hidden">
