@@ -125,9 +125,15 @@ export default function ProtectionMatrix() {
                 <tr
                   key={fault.id}
                   className="border-b border-border/40 hover:bg-muted/30 cursor-pointer transition-colors"
-                  onClick={() => setSelectedFault(fault)}
+                  onClick={() => setSelectedId(fault.id)}
                 >
-                  <td className="px-4 py-3 font-mono text-xs font-semibold text-primary">{fault.faultCode}</td>
+                  <td className="px-4 py-3 font-mono text-xs font-semibold text-primary">
+                    <span className="flex items-center gap-1.5">
+                      {fault.faultCode}
+                      {overrides[String(fault.id)] && <Pencil className="h-3 w-3 text-warning" />}
+                    </span>
+                  </td>
+
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span className="flex items-center gap-2">
                       <span>{fault.subsystemIcon}</span>
