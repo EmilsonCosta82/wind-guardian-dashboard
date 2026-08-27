@@ -5,7 +5,9 @@ import SeverityBadge from "@/components/SeverityBadge";
 import { faultEntries, getStats, subsystems } from "@/data/protectionMatrix";
 import { useState } from "react";
 import FaultDetailDialog from "@/components/FaultDetailDialog";
+import { useFaultOverrides } from "@/hooks/useFaultOverrides";
 import type { FaultEntry } from "@/data/protectionMatrix";
+
 
 const stats = getStats();
 
