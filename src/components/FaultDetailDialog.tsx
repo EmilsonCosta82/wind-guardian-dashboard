@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { FaultEntry } from "@/data/protectionMatrix";
 import SeverityBadge from "./SeverityBadge";
-import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardCheck, LinkIcon, Shield, Globe } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, LinkIcon, Shield, Globe } from "lucide-react";
 
 interface Props {
   fault: FaultEntry | null;
@@ -80,12 +80,6 @@ export default function FaultDetailDialog({ fault, open, onOpenChange }: Props) 
                     {action.step}
                   </div>
                   <div className="flex-1 min-w-0">
-                    {action.fieldProven && (
-                      <span className="status-badge bg-success/15 text-success border border-success/20 mb-1.5">
-                        <ClipboardCheck className="h-3 w-3" /> Registro de Campo
-                        {action.occurrences ? ` · ${action.occurrences} ocorrência(s)` : ""}
-                      </span>
-                    )}
                     <p className="text-sm leading-relaxed">{action.action}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
@@ -95,7 +89,6 @@ export default function FaultDetailDialog({ fault, open, onOpenChange }: Props) 
                       <span>⏱ {action.timeEstimate}</span>
                     </div>
                   </div>
-
                 </div>
               ))}
             </div>

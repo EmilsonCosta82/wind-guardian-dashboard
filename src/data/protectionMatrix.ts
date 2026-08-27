@@ -1,7 +1,5 @@
 // Protection Matrix - GWH171 V11 R01C100 6.0MW - Doc_PLC.txt
 // Auto-generated from PLC Web Configuration File
-import { fieldTreatments } from "./fieldTreatments";
-
 // Total fault entries: 9499 (3738 from PLC + 5761 reserved codes)
 
 export type Severity = "critical" | "high" | "medium" | "low";
@@ -11,10 +9,6 @@ export interface CorrectiveAction {
   action: string;
   responsible: string;
   timeEstimate: string;
-  /** Action based on real field records from the Daily Log Report */
-  fieldProven?: boolean;
-  /** Number of occurrences of this treatment in the field log */
-  occurrences?: number;
 }
 
 export interface FaultEntry {
@@ -34,7 +28,7 @@ export interface FaultEntry {
   correctiveActions: CorrectiveAction[];
 }
 
-const rawFaultEntries: FaultEntry[] = [
+export const faultEntries: FaultEntry[] = [
   {
     id: 1,
     faultCode: "1",
@@ -190018,28 +190012,6 @@ const rawFaultEntries: FaultEntry[] = [
 ];
 
 // Computed stats for Dashboard
-// Merge field-proven treatments (Daily Log Report) into steps 1..3 of each fault
-export const faultEntries: FaultEntry[] = rawFaultEntries.map((f) => {
-  const treatments = fieldTreatments[f.faultCode];
-  if (!treatments?.length) return f;
-  return {
-    ...f,
-    correctiveActions: f.correctiveActions.map((a, i) => {
-      const t = treatments[i];
-      if (!t) return { ...a, step: i + 1 };
-      return {
-        step: i + 1,
-        action: t.action,
-        responsible: "O&M Technician L2",
-        timeEstimate: a.timeEstimate,
-        fieldProven: true,
-        occurrences: t.occurrences,
-      };
-    }),
-  };
-});
-
-
 export function getStats() {
   const total = faultEntries.length;
   const critical = faultEntries.filter(f => f.severity === "critical").length;
