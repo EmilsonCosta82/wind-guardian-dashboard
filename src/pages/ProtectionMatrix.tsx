@@ -171,7 +171,15 @@ export default function ProtectionMatrix() {
         )}
       </div>
 
-      <FaultDetailDialog fault={selectedFault} open={!!selectedFault} onOpenChange={o => !o && setSelectedFault(null)} />
+      <FaultDetailDialog
+        fault={selectedFault}
+        open={selectedId !== null}
+        onOpenChange={o => !o && setSelectedId(null)}
+        onSave={saveFault}
+        onReset={resetFault}
+        isEdited={selectedId !== null && !!overrides[String(selectedId)]}
+      />
+
     </div>
   );
 }
