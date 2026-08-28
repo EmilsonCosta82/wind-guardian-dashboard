@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
 import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
+import ctgLogo from "@/assets/ctg-brasil-logo.png.asset.json";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -21,26 +22,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border">
           <Wind className="h-7 w-7 text-sidebar-primary shrink-0" />
-          {!collapsed && (
-            <div className="overflow-hidden">
-              <h1 className="text-sm font-bold text-sidebar-primary-foreground leading-tight">Serra da Palmeira</h1>
-              <p className="text-[10px] text-sidebar-foreground/60 leading-tight">GWH171 · 6.0MW</p>
-            </div>
-          )}
         </div>
 
         {!collapsed && (
           <div className="px-3 pt-3">
-            <div className="relative overflow-hidden rounded-lg border border-sidebar-border">
+            <div className="overflow-hidden rounded-lg border border-sidebar-border bg-sidebar-accent/30">
               <img
                 src={wtgImage.url}
                 alt="Parque eólico Serra da Palmeira ao pôr do sol"
                 loading="lazy"
-                className="h-32 w-full object-cover"
+                className="w-full h-auto object-contain"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-sidebar/95 to-transparent px-2 py-1.5">
-                <p className="text-[10px] font-medium text-sidebar-primary-foreground">Complexo Serra da Palmeira</p>
-              </div>
             </div>
           </div>
         )}
@@ -77,7 +69,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         <header className="sticky top-0 z-10 bg-card/95 backdrop-blur-sm border-b border-border h-14 flex items-center px-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <img src={ctgLogo.url} alt="CTG Brasil" className="h-8 w-auto" />
+            <span className="h-6 w-px bg-border" />
             <span className="font-medium text-foreground">Matriz de Proteção WTG</span>
             <span>·</span>
             <span>Modelo GWH171 - V11 R01C100</span>
