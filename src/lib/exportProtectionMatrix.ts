@@ -13,7 +13,7 @@ export function exportToPDF(faults: FaultEntry[]) {
   // Header
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Matriz de Proteção — GWH171 6.0MW", 14, 15);
+  doc.text("Painel de Falhas e Alarmes — GWH171 6.0MW", 14, 15);
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.text(`Serra da Palmeira — Gerado em ${new Date().toLocaleDateString("pt-BR")} — ${faults.length} registro(s)`, 14, 21);
@@ -118,7 +118,7 @@ export function exportToExcel(faults: FaultEntry[]) {
     { wch: 12 }, { wch: 18 }, { wch: 18 }, { wch: 10 },
     { wch: 50 }, { wch: 35 },
   ];
-  XLSX.utils.book_append_sheet(wb, ws1, "Matriz de Proteção");
+  XLSX.utils.book_append_sheet(wb, ws1, "Painel de Falhas e Alarmes");
 
   const ws2 = XLSX.utils.json_to_sheet(actionsData);
   ws2["!cols"] = [

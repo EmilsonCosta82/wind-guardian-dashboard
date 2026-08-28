@@ -6,7 +6,7 @@ import ctgLogo from "@/assets/ctg-brasil-logo.png.asset.json";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
-  { path: "/matriz", label: "Matriz de Proteção", icon: Shield },
+  { path: "/matriz", label: "Painel de Falhas e Alarmes", icon: Shield },
 ];
 
 
@@ -72,13 +72,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <img src={ctgLogo.url} alt="CTG Brasil" className="h-8 w-auto" />
             <span className="h-6 w-px bg-border" />
-            <span className="font-medium text-foreground">Matriz de Proteção WTG</span>
+            <span className="font-medium text-foreground">Painel de Falhas e Alarmes WTG</span>
             <span>·</span>
-            <span>Modelo GWH171 - V11 R01C100</span>
+            <span>Complexo Serra da Palmeira</span>
             <span>·</span>
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-success animate-pulse-slow" />
-              Sistema Online
+              GWH171 - V11
             </span>
           </div>
         </header>

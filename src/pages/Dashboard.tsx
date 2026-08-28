@@ -28,7 +28,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-bold">Dashboard</h2>
-        <p className="text-sm text-muted-foreground">Visão geral da Matriz de Proteção - Parque Eólico Serra da Palmeira</p>
+        <p className="text-sm text-muted-foreground">Visão geral do Painel de Falhas e Alarmes - Parque Eólico Serra da Palmeira</p>
       </div>
 
       {/* KPIs */}

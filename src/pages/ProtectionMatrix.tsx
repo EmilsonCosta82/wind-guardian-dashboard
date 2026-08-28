@@ -44,7 +44,7 @@ export default function ProtectionMatrix() {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold">Matriz de Proteção</h2>
+        <h2 className="text-xl font-bold">Painel de Falhas e Alarmes</h2>
         <p className="text-sm text-muted-foreground">Catálogo completo de falhas, impactos e ações corretivas do WTG GWH171 6.0MW — {faultEntries.length} registros totais</p>
       </div>
 
