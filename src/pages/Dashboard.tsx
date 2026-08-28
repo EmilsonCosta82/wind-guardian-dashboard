@@ -2,7 +2,6 @@ import { Shield, AlertTriangle, AlertOctagon, Activity, Layers, Link2 } from "lu
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import KPICard from "@/components/KPICard";
 import { getStats, subsystems } from "@/data/protectionMatrix";
-import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
 
 
 const stats = getStats();
@@ -68,24 +67,18 @@ export default function Dashboard() {
         </div>
 
         {/* Subsystem Bar */}
-        <div className="kpi-card lg:col-span-2 relative overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-25"
-            style={{ backgroundImage: `url(${wtgImage.url})` }}
-          />
-          <div className="relative z-10">
-            <h3 className="text-sm font-semibold mb-4">Falhas por Subsistema</h3>
-            <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={subsystemChartData} margin={{ left: 0, right: 10 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 16%, 90%)" />
-                <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={60} />
-                <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: "hsl(220, 26%, 14%)", border: "1px solid hsl(220, 16%, 30%)", borderRadius: 8, color: "#fff" }} />
-                <Bar dataKey="total" fill="hsl(210, 100%, 45%)" radius={[4, 4, 0, 0]} name="Total" />
-                <Bar dataKey="critical" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} name="Críticas" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="kpi-card lg:col-span-2">
+          <h3 className="text-sm font-semibold mb-4">Falhas por Subsistema</h3>
+          <ResponsiveContainer width="100%" height={230}>
+            <BarChart data={subsystemChartData} margin={{ left: 0, right: 10 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 16%, 90%)" />
+              <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-20} textAnchor="end" height={60} />
+              <YAxis tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <Bar dataKey="total" fill="hsl(210, 100%, 45%)" radius={[4, 4, 0, 0]} name="Total" />
+              <Bar dataKey="critical" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} name="Críticas" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
