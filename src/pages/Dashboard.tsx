@@ -2,6 +2,7 @@ import { Shield, AlertTriangle, AlertOctagon, Activity, Layers, Link2 } from "lu
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import KPICard from "@/components/KPICard";
 import { getStats, subsystems } from "@/data/protectionMatrix";
+import parqueFundoAsset from "@/assets/parque-fundo-severidade.png.asset.json";
 
 
 const stats = getStats();
