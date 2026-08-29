@@ -55,10 +55,10 @@ export default function Dashboard() {
           <div className="relative flex h-full flex-col">
             <h3 className="text-sm font-semibold mb-4">Distribuição por Severidade</h3>
             <div className="flex-grow" />
-            <div className="flex flex-col items-center gap-2 pb-2 pt-16">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 pb-2 pt-16">
               {severityData.map(s => (
-                <div key={s.name} className="flex items-center gap-2 text-sm font-medium">
-                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: s.color }} />
+                <div key={s.name} className="flex items-center gap-1.5 text-xs font-medium">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: s.color }} />
                   {s.name} ({s.value})
                 </div>
               ))}
