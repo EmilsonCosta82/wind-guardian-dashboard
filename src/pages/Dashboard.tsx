@@ -52,9 +52,10 @@ export default function Dashboard() {
             aria-hidden="true"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-background/40 to-background/10" aria-hidden="true" />
-          <div className="relative">
+          <div className="relative flex h-full flex-col">
             <h3 className="text-sm font-semibold mb-4">Distribuição por Severidade</h3>
-            <div className="flex flex-col items-center justify-center gap-3 py-6">
+            <div className="flex-grow" />
+            <div className="flex flex-col items-center gap-2 pb-2 pt-16">
               {severityData.map(s => (
                 <div key={s.name} className="flex items-center gap-2 text-sm font-medium">
                   <span className="h-3 w-3 rounded-full" style={{ backgroundColor: s.color }} />
