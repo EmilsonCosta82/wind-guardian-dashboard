@@ -48,26 +48,16 @@ export default function Dashboard() {
         <div className="kpi-card relative overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${parqueFundoAsset.url})`, opacity: 0.18 }}
+            style={{ backgroundImage: `url(${parqueFundoAsset.url})`, opacity: 0.55 }}
             aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-background/70 to-background/30" aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-br from-background/40 to-background/10" aria-hidden="true" />
           <div className="relative">
             <h3 className="text-sm font-semibold mb-4">Distribuição por Severidade</h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie data={severityData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" paddingAngle={4}>
-                  {severityData.map((entry, i) => (
-                    <Cell key={i} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex justify-center gap-4 mt-2">
+            <div className="flex flex-col items-center justify-center gap-3 py-6">
               {severityData.map(s => (
-                <div key={s.name} className="flex items-center gap-1.5 text-xs">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: s.color }} />
+                <div key={s.name} className="flex items-center gap-2 text-sm font-medium">
+                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: s.color }} />
                   {s.name} ({s.value})
                 </div>
               ))}
