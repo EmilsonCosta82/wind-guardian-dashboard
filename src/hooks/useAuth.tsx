@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const USER = "SDPCTG";
-const PASS = "CTG Brasil";
+const PASS = "CTGBrasil";
 const STORAGE_KEY = "sdp-auth";
 
 type AuthContextValue = {
