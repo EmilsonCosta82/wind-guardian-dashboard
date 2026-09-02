@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
 import ctgLogo from "@/assets/ctg-brasil-logo.png.asset.json";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -13,6 +15,8 @@ const navItems = [
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
+
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -81,7 +85,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               GWH171 - V11
             </span>
           </div>
+          <div className="ml-auto flex items-center gap-3 text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{user}</span>
+            <button
+              onClick={logout}
+              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted transition-colors"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Sair
+            </button>
+          </div>
         </header>
+
         <div className="p-6">{children}</div>
       </main>
     </div>
