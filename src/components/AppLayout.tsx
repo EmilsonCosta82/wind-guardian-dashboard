@@ -15,7 +15,7 @@ const navItems = [
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
 
 
   return (
