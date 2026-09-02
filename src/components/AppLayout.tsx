@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Shield, Wind, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import wtgImage from "@/assets/wtg-serra-palmeira.png.asset.json";
 import ctgLogo from "@/assets/ctg-brasil-logo.png.asset.json";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
